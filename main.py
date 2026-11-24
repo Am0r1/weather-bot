@@ -12,10 +12,15 @@ async def job():
     client = python_weather.Client(unit=python_weather.METRIC, locale=python_weather.enums.Locale.RUSSIAN)
     weather = await client.get("Voronezh")
     result = f"Температура: {weather.temperature} °C\nСкорость ветра: {weather.wind_speed} km/h\nОписание: {weather.description}\nВлажность: {weather.humidity}%\nДавление: {round(weather.pressure*100/133.322, 2)} mmHg"
-    await bot.send_message(chat_id=1704105791, text=result)
-asyncio.run(job())
-# schedule.every().day.at("07:00").do(job)
+    bot.send_message(chat_id=1704105791, text=result)
 
-# while True:
-#      schedule.run_pending()
-#      time.sleep(1)
+def start():
+    asyncio.run(job())
+
+schedule.every().day.at("07:00").do(start)
+
+#schedule.every(5).seconds.do(start)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
